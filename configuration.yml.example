@@ -1,0 +1,16 @@
+# MQTT Settings
+mqtt:
+  broker: 192.168.1.102
+  port: 1884
+  qos: 2
+  retain: true
+  discovery: true
+  discovery_prefix: homeassistant
+  topic_prefix: inception
+  availability_topic: inception/available
+  alarm_code: 1234
+
+# Inception area config
+inception:
+  - host: 192.168.1.188
+    port: 80
