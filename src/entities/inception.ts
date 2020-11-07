@@ -62,10 +62,78 @@ export default (config: any) => {
     }
   };
 
+  const postControlDoorActivity = async (id: string, controlType: string) => {
+    try {
+      await axios.post(`${config.base_url}/control/door/${id}/activity`, {
+        Type: 'ControlDoor',
+        DoorControlType: controlType
+      }, {
+        headers: {
+          Cookie: `LoginSessId=${userID}`
+        }
+      });
+
+      console.log(`Posted control door activity for door id '${id}' with door control type '${controlType}'`);
+    } catch (error) {
+      console.error('Error in posting control door activity: ' + error.message);
+    }
+  }
+
+  const getControlOutputs = async (): Promise<ControlObjectInterface[]> => {
+    try {
+      const response = await axios.get(config.base_url + '/control/output', {
+        headers: {
+          Cookie: `LoginSessId=${userID}`
+        }
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error('Error in getting control outputs: ' + error.message);
+      return [];
+    }
+  };
+
+  const postControlOutputActivity = async (id: string, controlType: string) => {
+    try {
+      await axios.post(`${config.base_url}/control/output/${id}/activity`, {
+        Type: 'ControlOutput',
+        OutputControlType: controlType
+      }, {
+        headers: {
+          Cookie: `LoginSessId=${userID}`
+        }
+      });
+
+      console.log(`Posted control output activity for output id '${id}' with output control type '${controlType}'`);
+    } catch (error) {
+      console.error('Error in posting control output activity: ' + error.message);
+    }
+  }
+
+  const getControlInputs = async (): Promise<ControlObjectInterface[]> => {
+    try {
+      const response = await axios.get(config.base_url + '/control/input', {
+        headers: {
+          Cookie: `LoginSessId=${userID}`
+        }
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error('Error in getting control inputs: ' + error.message);
+      return [];
+    }
+  };
+
   return {
     authenticate,
     getControlAreas,
     postControlAreaActivity,
-    getControlDoors
+    getControlDoors,
+    postControlDoorActivity,
+    getControlOutputs,
+    postControlOutputActivity,
+    getControlInputs
   }
 };
