@@ -12,5 +12,5 @@ mqtt:
 
 # Inception area config
 inception:
-  - host: 192.168.1.188
+  - base_url: http://192.168.1.188/api/v1
     port: 80
