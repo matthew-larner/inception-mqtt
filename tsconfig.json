@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "ES2016",
+    "module": "commonjs",
+    "allowJs": true,
+    "outDir": "./dist",
+    "experimentalDecorators": true
+  },
+  "include": ["./src/**/*"]
+}

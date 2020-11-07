@@ -1,0 +1,35 @@
+{
+  "name": "inception-mqtt",
+  "version": "1.0.0",
+  "description": "A docker container to interface Inner Range Inception with MQTT to be used with home automation like Home Assistant",
+  "private": true,
+  "main": "./dist/index.js",
+  "scripts": {
+    "start": "if-env NODE_ENV=local && npm run start:dev || npm run start:prod",
+    "start:prod": "node ./dist/index.js",
+    "start:dev": "tsc-watch --onSuccess \"npm run start:prod\" ",
+    "build": "./node_modules/typescript/bin/tsc -p ./tsconfig.json"
+  },
+  "dependencies": {
+    "@types/node": "^13.9.1",
+    "axios": "^0.21.0",
+    "if-env": "^1.0.4",
+    "mqtt": "^4.2.4",
+    "typescript": "^3.8.3",
+    "yaml": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/mqtt": "^2.5.0",
+    "@types/yaml": "^1.9.7",
+    "tsc-watch": "^4.2.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matthew-larner/inception-mqtt.git"
+  },
+  "bugs": {
+    "url": "https://github.com/matthew-larner/inception-mqtt/issues"
+  },
+  "homepage": "https://github.com/matthew-larner/inception-mqtt#readme"
+}
