@@ -12,7 +12,7 @@ A docker container to interface Inner Range Inception with MQTT to be used with 
 ```
 version: '3'
 services:
-  dynalite:
+  inception-mqtt:
     container_name: inception-mqtt
     image: matthewlarner/inception-mqtt:latest
     volumes:
