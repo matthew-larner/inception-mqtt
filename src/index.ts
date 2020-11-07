@@ -1,6 +1,6 @@
 import * as YAML from 'yaml';
 import * as fs from 'fs';
-import { IClientOptions, MqttClient } from 'mqtt';
+import { IClientOptions } from 'mqtt';
 
 import mqtt from './entities/mqtt';
 import inception from './entities/inception';
@@ -26,16 +26,13 @@ const main = async () => {
       }
     } as IClientOptions;
 
-    const mqttOnConnect = (client: MqttClient) => {
-      client.publish(availabilityTopic, 'online', {
-        qos: mqttConfig.qos,
-        retain: mqttConfig.retain
-      });
-    };
-    const mqttClient = mqtt(mqttConfig, mqttConnectOptions, mqttOnConnect);
+    const mqttClient = mqtt(mqttConfig, mqttConnectOptions);
 
-    const inceptionInstance = inception(inceptionConfig);
-    await inceptionInstance.authenticate();
+    const publishStatusChange = (isConnected: boolean) => {
+      mqttClient.publish(availabilityTopic, isConnected ? 'online' : 'offline');
+    };
+
+    const inceptionInstance = await inception(inceptionConfig, publishStatusChange);
 
     const controlAreas = await inceptionInstance.getControlAreas();
     controlAreas.map(area => {

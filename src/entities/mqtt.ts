@@ -1,6 +1,6 @@
 import * as mqtt from 'mqtt';
 
-const connect = (config: any, connectOptions: mqtt.IClientOptions, onConnected: (client: mqtt.MqttClient) => void) => {
+const connect = (config: any, connectOptions: mqtt.IClientOptions, onConnected?: (client: mqtt.MqttClient) => void) => {
 
   const client = mqtt.connect(`mqtt://${config.broker}:${config.port}`, connectOptions);
 
@@ -11,7 +11,9 @@ const connect = (config: any, connectOptions: mqtt.IClientOptions, onConnected: 
   client.on('connect', () => {
     console.log('Connected to mqtt');
 
-    onConnected(client);
+    if (onConnected) {
+      onConnected(client);
+    }
   });
 
   client.on('close', () => {

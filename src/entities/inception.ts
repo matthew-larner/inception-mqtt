@@ -1,18 +1,36 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import { ControlObjectInterface } from '../contracts';
 
-export default (config: any) => {
+export default async (config: any, onConnectionChange: (isConnected: boolean) => void) => {
   let userID = '';
 
-  const authenticate = async (): Promise<void> => {
-    const response = await axios.post(config.base_url + '/authentication/login', {
-      Username: config.username,
-      Password: config.password
-    });
+  const unauthorizedHandling = async (response: AxiosResponse) => {
+    if (response?.status === 401) {
+      onConnectionChange(false);
+      await authenticate();
+    }
+  };
 
-    userID = response.data.UserID;
-    console.log(userID);
+  const authenticate = async (): Promise<void> => {
+    try {
+      const response = await axios.post(config.base_url + '/authentication/login', {
+        Username: config.username,
+        Password: config.password
+      });
+
+      // Kill app if authentication fails
+      if (response.data.Response.Result !== "Success") {
+        console.error('Killing application due to failed authentication');
+        process.exit(1);
+      }
+
+      userID = response.data.UserID;
+
+      onConnectionChange(true);
+    } catch (error) {
+      console.error('Error in inception authentication: ' + error.message);
+    }
   };
 
   const getControlAreas = async (): Promise<ControlObjectInterface[]> => {
@@ -26,6 +44,9 @@ export default (config: any) => {
       return response.data;
     } catch (error) {
       console.error('Error in getting control areas: ' + error.message);
+
+      await unauthorizedHandling(error.response);
+
       return [];
     }
   };
@@ -44,6 +65,8 @@ export default (config: any) => {
       console.log(`Posted control area activity for area id '${id}' with area control type '${controlType}'`);
     } catch (error) {
       console.error('Error in posting control area activity: ' + error.message);
+
+      await unauthorizedHandling(error.response);
     }
   }
 
@@ -58,6 +81,9 @@ export default (config: any) => {
       return response.data;
     } catch (error) {
       console.error('Error in getting control doors: ' + error.message);
+
+      await unauthorizedHandling(error.response);
+
       return [];
     }
   };
@@ -76,6 +102,8 @@ export default (config: any) => {
       console.log(`Posted control door activity for door id '${id}' with door control type '${controlType}'`);
     } catch (error) {
       console.error('Error in posting control door activity: ' + error.message);
+
+      await unauthorizedHandling(error.response);
     }
   }
 
@@ -90,6 +118,9 @@ export default (config: any) => {
       return response.data;
     } catch (error) {
       console.error('Error in getting control outputs: ' + error.message);
+
+      await unauthorizedHandling(error.response);
+
       return [];
     }
   };
@@ -108,6 +139,8 @@ export default (config: any) => {
       console.log(`Posted control output activity for output id '${id}' with output control type '${controlType}'`);
     } catch (error) {
       console.error('Error in posting control output activity: ' + error.message);
+
+      await unauthorizedHandling(error.response);
     }
   }
 
@@ -122,12 +155,16 @@ export default (config: any) => {
       return response.data;
     } catch (error) {
       console.error('Error in getting control inputs: ' + error.message);
+
+      await unauthorizedHandling(error.response);
+
       return [];
     }
   };
 
+  await authenticate();
+
   return {
-    authenticate,
     getControlAreas,
     postControlAreaActivity,
     getControlDoors,
