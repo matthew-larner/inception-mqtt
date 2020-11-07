@@ -9,7 +9,7 @@ import * as inceptionHandler from './entities/inceptionHandler';
 const main = async () => {
   try {
     // Get and parse configuration
-    const config = YAML.parse(fs.readFileSync('./configuration.yml', 'utf8'));
+    const config = YAML.parse(fs.readFileSync('./config/configuration.yml', 'utf8'));
     const {
       mqtt: mqttConfig,
       inception: [inceptionConfig]
