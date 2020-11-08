@@ -113,7 +113,6 @@ const startControlInputs = async () => {
     const name = input.Name;
     const outputId = input.ID;
     const topic = `${mqttConfig.discovery_prefix}/binary_sensor/${outputId}/config`;
-    const commandTopic = `inception/binary_sensor/${outputId}/set`;
 
     let deviceClass = [
       'door',
@@ -138,13 +137,10 @@ const startControlInputs = async () => {
     const message = {
       name,
       state_topic: `inception/binary_sensor/${outputId}`,
-      command_topic: commandTopic,
       availability_topic: mqttConfig.availability_topic,
       device_class: deviceClass
     }
     mqtt.publish(topic, JSON.stringify(message));
-
-    // Does not listen to command_topic
   });
 };
 
