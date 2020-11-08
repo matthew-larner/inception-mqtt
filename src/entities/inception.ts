@@ -17,7 +17,9 @@ const responseErrorHandler = async (error: AxiosError) => {
   } else if (['ECONNREFUSED', 'SOCKET HANG UP', 'EHOSTUNREACH'].some((i) => error.message.toUpperCase().includes(i))) {
     onAuthenticatedHandler(false);
     isConnected = false;
-  } else if (error.message.includes('timeout')) {
+  }
+
+  if (['TIMEOUT', 'EHOSTUNREACH'].some((i) => error.message.toUpperCase().includes(i))) {
     await delay(10000);
   }
 };
