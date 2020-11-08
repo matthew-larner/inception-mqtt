@@ -1,4 +1,5 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError } from 'axios';
+import * as delay from 'delay';
 
 import { ControlObjectInterface, MonitorUpdatesResponseInterface } from '../contracts';
 
@@ -13,9 +14,11 @@ const responseErrorHandler = async (error: AxiosError) => {
     onAuthenticatedHandler(false);
     isConnected = false;
     await authenticate();
-  } else if (error?.request && !error?.response) {
+  } else if (['ECONNREFUSED', 'SOCKET HANG UP', 'EHOSTUNREACH'].some((i) => error.message.toUpperCase().includes(i))) {
     onAuthenticatedHandler(false);
     isConnected = false;
+  } else if (error.message.includes('timeout')) {
+    await delay(10000);
   }
 };
 
@@ -180,8 +183,7 @@ export const monitorUpdates = async (payload: any[]): Promise<MonitorUpdatesResp
     const response = await axios.post(`${config.base_url}/monitor-updates`, payload, {
       headers: {
         Cookie: `LoginSessId=${userID}`
-      },
-      timeout: 30000
+      }
     });
 
     console.log('Successfully polled monitor updates');
