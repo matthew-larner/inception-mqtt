@@ -180,7 +180,8 @@ export const monitorUpdates = async (payload: any[]): Promise<MonitorUpdatesResp
     const response = await axios.post(`${config.base_url}/monitor-updates`, payload, {
       headers: {
         Cookie: `LoginSessId=${userID}`
-      }
+      },
+      timeout: 30000
     });
 
     console.log('Successfully polled monitor updates');
