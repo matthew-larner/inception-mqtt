@@ -141,7 +141,9 @@ const startControlInputs = async () => {
       name,
       state_topic: `inception/binary_sensor/${outputId}`,
       availability_topic: mqttConfig.availability_topic,
-      device_class: deviceClass
+      device_class: deviceClass,
+      payload_off: 'Off',
+      payload_on: 'On',
     }
     mqtt.publish(topic, JSON.stringify(message));
   });
