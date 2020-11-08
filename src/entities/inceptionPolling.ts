@@ -126,7 +126,7 @@ export const polling = async () => {
         monitorUpdatesPayload.find(item => item.ID === response.ID).InputData.timeSinceUpdate = response.Result.updateTime.toString(); // updates `timeSinceUpdate` = 'Result.updateTime' for the new long polling request.
       }
     } catch (error) {
-      console.error(error.message);
+      console.error('Inception polling encountered an error: ', error.message);
     }
   }
 };
