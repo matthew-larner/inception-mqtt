@@ -15,8 +15,10 @@ const responseErrorHandler = async (error: AxiosError) => {
     isConnected = false;
     await authenticate();
   } else if (['ECONNREFUSED', 'SOCKET HANG UP', 'EHOSTUNREACH'].some((i) => error.message.toUpperCase().includes(i))) {
-    onAuthenticatedHandler(false);
-    isConnected = false;
+    if (isConnected) {
+      onAuthenticatedHandler(false);
+      isConnected = false;
+    }
   }
 
   if (['TIMEOUT', 'EHOSTUNREACH'].some((i) => error.message.toUpperCase().includes(i))) {
