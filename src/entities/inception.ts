@@ -13,7 +13,8 @@ const responseErrorHandler = async (error: AxiosError) => {
     onAuthenticatedHandler(false);
     isConnected = false;
     await authenticate();
-  } else if (['ECONNREFUSED', 'EHOSTUNREACH'].some(i => error.message.includes(i))) {
+  } else if (error?.request && !error?.response) {
+    onAuthenticatedHandler(false);
     isConnected = false;
   }
 };
