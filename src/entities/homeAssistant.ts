@@ -77,7 +77,7 @@ const startControlOutputs = async () => {
 
     let icon = 'mdi:help-circle';
 
-    if (['screamer', 'siren'].includes(name.toLowerCase())) {
+    if (['screamer', 'siren'].some(i => name.toLowerCase().includes(i))) {
       icon = 'mdi:bullhorn-outline';
     } else if (name.toLowerCase().includes('door')) {
       icon = 'mdi:door-closed-lock';
