@@ -1,14 +1,14 @@
 import axios, { AxiosResponse } from 'axios';
 
-import { ControlObjectInterface } from '../contracts';
+import { ControlObjectInterface, MonitorUpdatesResponseInterface } from '../contracts';
 
 let config: any;
 let userID = '';
-let onConnectionChange: (isConnected: boolean) => void;
+let onAuthenticatedHandler: (isConnected: boolean) => void;
 
 const unauthorizedHandling = async (response: AxiosResponse) => {
   if (response?.status === 401) {
-    onConnectionChange(false);
+    onAuthenticatedHandler(false);
     await authenticate();
   }
 };
@@ -22,13 +22,13 @@ const authenticate = async (): Promise<void> => {
 
     // Kill app if authentication fails
     if (response.data.Response.Result !== "Success") {
-      console.error('Killing application due to failed authentication');
+      console.error('Killing application due to failed inception authentication');
       process.exit(1);
     }
 
     userID = response.data.UserID;
 
-    onConnectionChange(true);
+    onAuthenticatedHandler(true);
   } catch (error) {
     console.error('Error in inception authentication: ' + error.message);
   }
@@ -163,9 +163,25 @@ export const getControlInputs = async (): Promise<ControlObjectInterface[]> => {
   }
 };
 
+export const monitorUpdates = async (payload: any[]): Promise<MonitorUpdatesResponseInterface> => {
+  try {
+    const response = await axios.post(`${config.base_url}/monitor-updates`, payload, {
+      headers: {
+        Cookie: `LoginSessId=${userID}`
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error in posting monitor updates: ' + error.message);
+
+    await unauthorizedHandling(error.response);
+  }
+}
+
 export const connect = async (configuration: any, onAuthenticated: (isConnected: boolean) => void) => {
   config = configuration;
-  onConnectionChange = onAuthenticated;
+  onAuthenticatedHandler = onAuthenticated;
 
   await authenticate();
 };

@@ -1,8 +1,16 @@
 import * as inception from './inception';
 import * as mqtt from './mqtt';
-import * as inceptionHandler from './inceptionHandler';
 
-let mqttConfig;
+let mqttConfig: any;
+
+const mqttMessageHandler = (commandTopic: string, callback: (payload: string) => Promise<void>) =>
+  async (topic: string, message: Buffer) => {
+    if (topic === commandTopic) {
+      const payload = message.toString();
+
+      await callback(payload);
+    }
+  };
 
 const startControlAreas = async () => {
   const controlAreas = await inception.getControlAreas();
@@ -26,7 +34,7 @@ const startControlAreas = async () => {
     mqtt.publish(topic, JSON.stringify(message));
     mqtt.subscribe(commandTopic);
 
-    const areaHandler = inceptionHandler.handler(commandTopic, async (payload: string) => {
+    const areaHandler = mqttMessageHandler(commandTopic, async (payload: string) => {
       await inception.postControlAreaActivity(areaId, payload);
     });
     mqtt.onMessage(areaHandler);
@@ -52,7 +60,7 @@ const startControlDoors = async () => {
     mqtt.publish(topic, JSON.stringify(message));
     mqtt.subscribe(commandTopic);
 
-    const doorHandler = inceptionHandler.handler(commandTopic, async (payload: string) => {
+    const doorHandler = mqttMessageHandler(commandTopic, async (payload: string) => {
       await inception.postControlDoorActivity(doorId, payload);
     });
     mqtt.onMessage(doorHandler);
@@ -92,7 +100,7 @@ const startControlOutputs = async () => {
     mqtt.publish(topic, JSON.stringify(message));
     mqtt.subscribe(commandTopic);
 
-    const outputHandler = inceptionHandler.handler(commandTopic, async (payload: string) => {
+    const outputHandler = mqttMessageHandler(commandTopic, async (payload: string) => {
       await inception.postControlOutputActivity(outputId, payload);
     });
     mqtt.onMessage(outputHandler);
