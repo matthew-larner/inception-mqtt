@@ -77,7 +77,7 @@ const startControlOutputs = async () => {
 
     let icon = 'mdi:help-circle';
 
-    if (name.toLowerCase().includes('screamer') || name.toLowerCase().includes('siren')) {
+    if (['screamer', 'siren'].includes(name.toLowerCase())) {
       icon = 'mdi:bullhorn-outline';
     } else if (name.toLowerCase().includes('door')) {
       icon = 'mdi:door-closed-lock';
@@ -115,8 +115,10 @@ const startControlInputs = async () => {
     const topic = `${mqttConfig.discovery_prefix}/binary_sensor/${outputId}/config`;
 
     let deviceClass = [
-      'door',
       'motion',
+      'garage',
+      'door',
+      'rex',
       'opening',
       'power',
       'smoke',
@@ -128,9 +130,10 @@ const startControlInputs = async () => {
       'moisture'
     ].find(device => name.toLowerCase().includes(device)) || 'None';
 
-    if (name.toLowerCase().includes('garage')) {
+    // override found device
+    if (deviceClass === 'garage') {
       deviceClass = 'garage_door';
-    } else if (name.toLowerCase().includes('rex')) {
+    } else if (deviceClass === 'rex') {
       deviceClass = 'door';
     }
 
