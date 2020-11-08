@@ -6,6 +6,8 @@ export const polling = async () => {
     const topic = `inception/alarm_control_panel/${id}`;
     let message: string;
 
+    console.log(`Polling area received id '${id}' with public state '${publicState}'`);
+
     if ([1, 256].includes(publicState)) {
       message = 'armed_away';
     } else if (publicState === 2) {
@@ -31,6 +33,8 @@ export const polling = async () => {
     const topic = `inception/binary_sensor/${id}`;
     let message: string;
 
+    console.log(`Polling input received id '${id}' with public state '${publicState}'`);
+
     if ([1, 2, 8].includes(publicState)) {
       message = 'On';
     } else if ([4, 64].includes(publicState)) {
@@ -46,6 +50,8 @@ export const polling = async () => {
     const topic = `inception/switch/${id}`;
     let message: string;
 
+    console.log(`Polling ouput received id '${id}' with public state '${publicState}'`);
+
     if (publicState === 1) {
       message = 'On';
     } else if (publicState === 2) {
@@ -60,6 +66,8 @@ export const polling = async () => {
   const publishDoorStateUpdates = (id: string, publicState: number) => {
     const topic = `inception/lock/${id}`;
     let message: string;
+
+    console.log(`Polling door received id '${id}' with public state '${publicState}'`);
 
     if (publicState === 1) {
       message = 'UNLOCKED';
