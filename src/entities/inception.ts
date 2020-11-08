@@ -1,15 +1,20 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
 import { ControlObjectInterface, MonitorUpdatesResponseInterface } from '../contracts';
 
 let config: any;
 let userID = '';
+let isConnected = false;
+let wasConnectedOnce = false;
 let onAuthenticatedHandler: (isConnected: boolean) => void;
 
-const unauthorizedHandling = async (response: AxiosResponse) => {
-  if (response?.status === 401) {
+const responseErrorHandler = async (error: AxiosError) => {
+  if (error?.response?.status === 401) {
     onAuthenticatedHandler(false);
+    isConnected = false;
     await authenticate();
+  } else if (['ECONNREFUSED', 'EHOSTUNREACH'].some(i => error.message.includes(i))) {
+    isConnected = false;
   }
 };
 
@@ -27,10 +32,16 @@ const authenticate = async (): Promise<void> => {
     }
 
     userID = response.data.UserID;
+    isConnected = true;
+    wasConnectedOnce = true;
 
     onAuthenticatedHandler(true);
   } catch (error) {
     console.error('Error in inception authentication: ' + error.message);
+
+    if (!wasConnectedOnce) {
+      process.exit(1);
+    }
   }
 };
 
@@ -46,7 +57,7 @@ export const getControlAreas = async (): Promise<ControlObjectInterface[]> => {
   } catch (error) {
     console.error('Error in getting control areas: ' + error.message);
 
-    await unauthorizedHandling(error.response);
+    await responseErrorHandler(error);
 
     return [];
   }
@@ -67,7 +78,7 @@ export const postControlAreaActivity = async (id: string, controlType: string) =
   } catch (error) {
     console.error('Error in posting control area activity: ' + error.message);
 
-    await unauthorizedHandling(error.response);
+    await responseErrorHandler(error);
   }
 }
 
@@ -83,7 +94,7 @@ export const getControlDoors = async (): Promise<ControlObjectInterface[]> => {
   } catch (error) {
     console.error('Error in getting control doors: ' + error.message);
 
-    await unauthorizedHandling(error.response);
+    await responseErrorHandler(error);
 
     return [];
   }
@@ -104,7 +115,7 @@ export const postControlDoorActivity = async (id: string, controlType: string) =
   } catch (error) {
     console.error('Error in posting control door activity: ' + error.message);
 
-    await unauthorizedHandling(error.response);
+    await responseErrorHandler(error);
   }
 }
 
@@ -120,7 +131,7 @@ export const getControlOutputs = async (): Promise<ControlObjectInterface[]> => 
   } catch (error) {
     console.error('Error in getting control outputs: ' + error.message);
 
-    await unauthorizedHandling(error.response);
+    await responseErrorHandler(error);
 
     return [];
   }
@@ -141,7 +152,7 @@ export const postControlOutputActivity = async (id: string, controlType: string)
   } catch (error) {
     console.error('Error in posting control output activity: ' + error.message);
 
-    await unauthorizedHandling(error.response);
+    await responseErrorHandler(error);
   }
 }
 
@@ -157,7 +168,7 @@ export const getControlInputs = async (): Promise<ControlObjectInterface[]> => {
   } catch (error) {
     console.error('Error in getting control inputs: ' + error.message);
 
-    await unauthorizedHandling(error.response);
+    await responseErrorHandler(error);
 
     return [];
   }
@@ -171,11 +182,13 @@ export const monitorUpdates = async (payload: any[]): Promise<MonitorUpdatesResp
       }
     });
 
+    console.log('Successfully polled monitor updates');
+
     return response.data;
   } catch (error) {
     console.error('Error in posting monitor updates: ' + error.message);
 
-    await unauthorizedHandling(error.response);
+    await responseErrorHandler(error);
   }
 }
 
@@ -185,3 +198,5 @@ export const connect = async (configuration: any, onAuthenticated: (isConnected:
 
   await authenticate();
 };
+
+export const getIsConnected = () => isConnected;

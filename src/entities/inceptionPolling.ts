@@ -81,7 +81,7 @@ export const polling = async () => {
     mqtt.publish(topic, message);
   };
 
-  const monitorUpdatesPayload = [
+  const initialMonitorUpdatesPayload = [
     {
       ID: "AreaStateRequest",
       RequestType: "MonitorEntityStates",
@@ -123,15 +123,23 @@ export const polling = async () => {
     'DoorStateRequest': publishDoorStateUpdates
   };
 
+  let monitorUpdatesPayload = initialMonitorUpdatesPayload.map(item => ({ ...item }));
+
   while (true) {
     try {
-      const response = await inception.monitorUpdates(monitorUpdatesPayload);
+      if (inception.getIsConnected()) {
+        console.log('Polling monitor updates');
 
-      const handler = stateChangeMapping[response?.ID];
+        const response = await inception.monitorUpdates(monitorUpdatesPayload);
 
-      if (handler) {
-        response.Result.stateData.forEach(item => handler(item.ID, item.PublicState));
-        monitorUpdatesPayload.find(item => item.ID === response.ID).InputData.timeSinceUpdate = response.Result.updateTime.toString(); // updates `timeSinceUpdate` = 'Result.updateTime' for the new long polling request.
+        const handler = stateChangeMapping[response?.ID];
+
+        if (handler) {
+          response.Result.stateData.forEach(item => handler(item.ID, item.PublicState));
+          monitorUpdatesPayload.find(item => item.ID === response.ID).InputData.timeSinceUpdate = response.Result.updateTime.toString(); // updates `timeSinceUpdate` = 'Result.updateTime' for the new long polling request.
+        }
+      } else {
+        monitorUpdatesPayload = initialMonitorUpdatesPayload.map(item => ({ ...item }));
       }
     } catch (error) {
       console.error('Inception polling encountered an error: ', error.message);
