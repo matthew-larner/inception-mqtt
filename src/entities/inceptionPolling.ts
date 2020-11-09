@@ -1,3 +1,4 @@
+import { MonitorUpdatesPayloadInterface } from '../contracts';
 import * as inception from './inception';
 import * as mqtt from './mqtt';
 
@@ -81,41 +82,6 @@ export const polling = async () => {
     mqtt.publish(topic, message);
   };
 
-  const initialMonitorUpdatesPayload = [
-    {
-      ID: "AreaStateRequest",
-      RequestType: "MonitorEntityStates",
-      InputData: {
-        stateType: "AreaState",
-        timeSinceUpdate: "0"
-      }
-    },
-    {
-      ID: "InputStateRequest",
-      RequestType: "MonitorEntityStates",
-      InputData: {
-        stateType: "InputState",
-        timeSinceUpdate: "0"
-      }
-    },
-    {
-      ID: "OutputStateRequest",
-      RequestType: "MonitorEntityStates",
-      InputData: {
-        stateType: "OutputState",
-        timeSinceUpdate: "0"
-      }
-    },
-    {
-      ID: "DoorStateRequest",
-      RequestType: "MonitorEntityStates",
-      InputData: {
-        stateType: "DoorState",
-        timeSinceUpdate: "0"
-      }
-    }
-  ];
-
   const stateChangeMapping = {
     'AreaStateRequest': publishAreaStateUpdates,
     'InputStateRequest': publishInputStateUpdates,
@@ -123,12 +89,45 @@ export const polling = async () => {
     'DoorStateRequest': publishDoorStateUpdates
   };
 
-  let monitorUpdatesPayload = initialMonitorUpdatesPayload.map(item => ({ ...item }));
+  let monitorUpdatesPayload: MonitorUpdatesPayloadInterface[];
 
   while (true) {
     try {
-      if (!inception.getIsConnected()) {
-        monitorUpdatesPayload = initialMonitorUpdatesPayload.map(item => ({ ...item }));
+      if (!monitorUpdatesPayload || !inception.getIsConnected()) {
+        monitorUpdatesPayload = [
+          {
+            ID: "AreaStateRequest",
+            RequestType: "MonitorEntityStates",
+            InputData: {
+              stateType: "AreaState",
+              timeSinceUpdate: "0"
+            }
+          },
+          {
+            ID: "InputStateRequest",
+            RequestType: "MonitorEntityStates",
+            InputData: {
+              stateType: "InputState",
+              timeSinceUpdate: "0"
+            }
+          },
+          {
+            ID: "OutputStateRequest",
+            RequestType: "MonitorEntityStates",
+            InputData: {
+              stateType: "OutputState",
+              timeSinceUpdate: "0"
+            }
+          },
+          {
+            ID: "DoorStateRequest",
+            RequestType: "MonitorEntityStates",
+            InputData: {
+              stateType: "DoorState",
+              timeSinceUpdate: "0"
+            }
+          }
+        ];
       }
 
       console.log('Polling monitor updates');

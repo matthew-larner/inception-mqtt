@@ -4,8 +4,19 @@ export interface ControlObjectInterface {
   Name: string;
 }
 
+export type StateRequestType = "AreaStateRequest" | "DoorStateRequest" | "InputStateRequest" | "OutputStateRequest";
+
+export interface MonitorUpdatesPayloadInterface {
+  ID: StateRequestType;
+  RequestType: string;
+  InputData: {
+    stateType: string;
+    timeSinceUpdate: string;
+  }
+}
+
 export interface MonitorUpdatesResponseInterface {
-  ID: "AreaStateRequest" | "DoorStateRequest" | "InputStateRequest" | "OutputStateRequest";
+  ID: StateRequestType;
   Result: {
     updateTime: number;
     stateData: StateDataInterface[];
