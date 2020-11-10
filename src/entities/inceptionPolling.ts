@@ -1,27 +1,30 @@
 import { MonitorUpdatesPayloadInterface } from '../contracts';
 import * as inception from './inception';
 import * as mqtt from './mqtt';
+import * as utils from './utils';
 
 export const polling = async () => {
   const publishAreaStateUpdates = (id: string, publicState: number) => {
     const topic = `inception/alarm_control_panel/${id}`;
+    const publicStateBin = utils.numberToBinaryStringWithZeroPadding(publicState, 12);
+    const indexOfOne = publicStateBin.indexOf('1') + 1;
     let message: string;
 
-    console.log(`Polling area received id '${id}' with public state '${publicState}'`);
+    console.log(`Polling area received id '${id}' with public state '${publicState}' in binary '${publicStateBin}'`);
 
-    if (publicState === 257) {
-      message = 'armed_away';
-    } else if (publicState === 259) {
+    if (indexOfOne === 11) {
       message = 'triggered';
-    } else if (publicState === 261) {
+    } else if (indexOfOne === 10) {
       message = 'pending';
-    } else if (publicState === 265) {
+    } else if (publicState === 9) {
       message = 'arming';
-    } else if (publicState === 513) {
+    } else if (indexOfOne === 4) {
+      message = 'armed_away';
+    } else if (publicState === 3) {
       message = 'armed_home';
-    } else if (publicState === 1025) {
+    } else if (publicState === 2) {
       message = 'armed_night';
-    } else if (publicState === 2048) {
+    } else if (publicState === 1) {
       message = 'disarmed';
     } else {
       // ignore if unexpected public state
@@ -32,13 +35,15 @@ export const polling = async () => {
   };
   const publishInputStateUpdates = (id: string, publicState: number) => {
     const topic = `inception/binary_sensor/${id}`;
+    const publicStateBin = utils.numberToBinaryStringWithZeroPadding(publicState, 12);
+    const indexOfOne = publicStateBin.indexOf('1') + 1;
     let message: string;
 
-    console.log(`Polling input received id '${id}' with public state '${publicState}'`);
+    console.log(`Polling input received id '${id}' with public state '${publicState}' in binary '${publicStateBin}'`);
 
-    if ([1, 2, 8].includes(publicState)) {
+    if ([12, 11, 9, 8].includes(indexOfOne)) {
       message = 'On';
-    } else if ([4, 64, 68].includes(publicState)) {
+    } else if ([10, 6].includes(indexOfOne)) {
       message = 'Off';
     } else {
       // ignore if unexpected public state
@@ -49,13 +54,15 @@ export const polling = async () => {
   };
   const publishOutputStateUpdates = (id: string, publicState: number) => {
     const topic = `inception/switch/${id}`;
+    const publicStateBin = utils.numberToBinaryStringWithZeroPadding(publicState, 12);
+    const indexOfOne = publicStateBin.indexOf('1') + 1;
     let message: string;
 
-    console.log(`Polling ouput received id '${id}' with public state '${publicState}'`);
+    console.log(`Polling ouput received id '${id}' with public state '${publicState}' in binary '${publicStateBin}'`);
 
-    if (publicState === 1) {
+    if (indexOfOne === 12) {
       message = 'On';
-    } else if (publicState === 2) {
+    } else if (indexOfOne === 11) {
       message = 'Off';
     } else {
       // ignore if unexpected public state
@@ -66,13 +73,15 @@ export const polling = async () => {
   };
   const publishDoorStateUpdates = (id: string, publicState: number) => {
     const topic = `inception/lock/${id}`;
+    const publicStateBin = utils.numberToBinaryStringWithZeroPadding(publicState, 12);
+    const indexOfOne = publicStateBin.indexOf('1') + 1;
     let message: string;
 
-    console.log(`Polling door received id '${id}' with public state '${publicState}'`);
+    console.log(`Polling door received id '${id}' with public state '${publicState}' in binary '${publicStateBin}'`);
 
-    if (publicState === 3) {
+    if (indexOfOne === 12) {
       message = 'UNLOCKED';
-    } else if (publicState === 258) {
+    } else if (indexOfOne === 1) {
       message = 'LOCKED';
     } else {
       // ignore if unexpected public state
