@@ -14,15 +14,6 @@ const responseErrorHandler = async (error: AxiosError) => {
     onAuthenticatedHandler(false);
     isConnected = false;
     await authenticate();
-  } else if (['ECONNREFUSED', 'SOCKET HANG UP', 'EHOSTUNREACH'].some((i) => error.message.toUpperCase().includes(i))) {
-    if (isConnected) {
-      onAuthenticatedHandler(false);
-      isConnected = false;
-    }
-  }
-
-  if (['TIMEOUT', 'EHOSTUNREACH'].some((i) => error.message.toUpperCase().includes(i))) {
-    await delay(10000);
   }
 };
 
@@ -199,6 +190,9 @@ export const monitorUpdates = async (payload: any[]): Promise<MonitorUpdatesResp
     console.error('Error in posting monitor updates: ' + error.message);
 
     await responseErrorHandler(error);
+
+    const delaySeconds = (config.polling_delay || 10) * 1000;
+    await delay(delaySeconds);
   }
 }
 

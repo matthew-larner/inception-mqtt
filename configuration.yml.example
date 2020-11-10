@@ -17,3 +17,4 @@ inception:
     username: exampleUser
     password: examplePassword
     polling_timeout: 60
+    polling_delay: 60
