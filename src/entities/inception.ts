@@ -184,10 +184,12 @@ export const getControlInputs = async (): Promise<ControlObjectInterface[]> => {
 
 export const monitorUpdates = async (payload: any[]): Promise<MonitorUpdatesResponseInterface> => {
   try {
+    const timeout = (config.polling_timeout ?? 60) * 1000;
     const response = await axios.post(`${config.base_url}/monitor-updates`, payload, {
       headers: {
         Cookie: `LoginSessId=${userID}`
-      }
+      },
+      timeout
     });
 
     console.log('Successfully polled monitor updates');

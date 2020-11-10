@@ -16,3 +16,4 @@ inception:
     port: 80
     username: exampleUser
     password: examplePassword
+    polling_timeout: 60
