@@ -7,24 +7,23 @@ export const polling = async () => {
   const publishAreaStateUpdates = (id: string, publicState: number) => {
     const topic = `inception/alarm_control_panel/${id}`;
     const publicStateBin = utils.numberToBinaryStringWithZeroPadding(publicState, 12);
-    const indexOfOne = publicStateBin.indexOf('1') + 1;
     let message: string;
 
     console.log(`Polling area received id '${id}' with public state '${publicState}' in binary '${publicStateBin}'`);
 
-    if (indexOfOne === 11) {
+    if (utils.isStringIndexContains(publicStateBin, 11, '1')) {
       message = 'triggered';
-    } else if (indexOfOne === 10) {
+    } else if (utils.isStringIndexContains(publicStateBin, 10, '1')) {
       message = 'pending';
-    } else if (indexOfOne === 9) {
+    } else if (utils.isStringIndexContains(publicStateBin, 9, '1')) {
       message = 'arming';
-    } else if (indexOfOne === 4) {
+    } else if (utils.isStringIndexContains(publicStateBin, 4, '1')) {
       message = 'armed_away';
-    } else if (indexOfOne === 3) {
+    } else if (utils.isStringIndexContains(publicStateBin, 3, '1')) {
       message = 'armed_home';
-    } else if (indexOfOne === 2) {
+    } else if (utils.isStringIndexContains(publicStateBin, 2, '1')) {
       message = 'armed_night';
-    } else if (indexOfOne === 1) {
+    } else if (utils.isStringIndexContains(publicStateBin, 1, '1')) {
       message = 'disarmed';
     } else {
       // ignore if unexpected public state
@@ -36,14 +35,13 @@ export const polling = async () => {
   const publishInputStateUpdates = (id: string, publicState: number) => {
     const topic = `inception/binary_sensor/${id}`;
     const publicStateBin = utils.numberToBinaryStringWithZeroPadding(publicState, 12);
-    const indexOfOne = publicStateBin.indexOf('1') + 1;
     let message: string;
 
     console.log(`Polling input received id '${id}' with public state '${publicState}' in binary '${publicStateBin}'`);
 
-    if ([12, 11, 9, 8].includes(indexOfOne)) {
+    if ([12, 11, 9, 8].some(i => utils.isStringIndexContains(publicStateBin, i, '1'))) {
       message = 'On';
-    } else if ([10, 6].includes(indexOfOne)) {
+    } else if ([10, 6].some(i => utils.isStringIndexContains(publicStateBin, i, '1'))) {
       message = 'Off';
     } else {
       // ignore if unexpected public state
@@ -55,14 +53,13 @@ export const polling = async () => {
   const publishOutputStateUpdates = (id: string, publicState: number) => {
     const topic = `inception/switch/${id}`;
     const publicStateBin = utils.numberToBinaryStringWithZeroPadding(publicState, 12);
-    const indexOfOne = publicStateBin.indexOf('1') + 1;
     let message: string;
 
-    console.log(`Polling ouput received id '${id}' with public state '${publicState}' in binary '${publicStateBin}'`);
+    console.log(`Polling output received id '${id}' with public state '${publicState}' in binary '${publicStateBin}'`);
 
-    if (indexOfOne === 12) {
+    if (utils.isStringIndexContains(publicStateBin, 12, '1')) {
       message = 'On';
-    } else if (indexOfOne === 11) {
+    } else if (utils.isStringIndexContains(publicStateBin, 11, '1')) {
       message = 'Off';
     } else {
       // ignore if unexpected public state
@@ -74,14 +71,13 @@ export const polling = async () => {
   const publishDoorStateUpdates = (id: string, publicState: number) => {
     const topic = `inception/lock/${id}`;
     const publicStateBin = utils.numberToBinaryStringWithZeroPadding(publicState, 12);
-    const indexOfOne = publicStateBin.indexOf('1') + 1;
     let message: string;
 
     console.log(`Polling door received id '${id}' with public state '${publicState}' in binary '${publicStateBin}'`);
 
-    if (indexOfOne === 12) {
+    if (utils.isStringIndexContains(publicStateBin, 12, '1')) {
       message = 'UNLOCKED';
-    } else if (indexOfOne === 4) {
+    } else if (utils.isStringIndexContains(publicStateBin, 4, '1')) {
       message = 'LOCKED';
     } else {
       // ignore if unexpected public state
