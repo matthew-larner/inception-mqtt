@@ -10,7 +10,7 @@ let wasConnectedOnce = false;
 let onAuthenticatedHandler: (isConnected: boolean) => void;
 
 const responseErrorHandler = async (error: AxiosError, onUnAuthorizedHandler?: () => void) => {
-  if (!error.response && ['TIMEOUT'].some((i) => error.message.toUpperCase().includes(i))) {
+  if (!error.response && !['TIMEOUT'].some((i) => error.message.toUpperCase().includes(i))) {
     onAuthenticatedHandler(false);
   }
 
