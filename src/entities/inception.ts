@@ -10,9 +10,11 @@ let wasConnectedOnce = false;
 let onAuthenticatedHandler: (isConnected: boolean) => void;
 
 const responseErrorHandler = async (error: AxiosError, onUnAuthorizedHandler?: () => void) => {
-  if (error?.response?.status === 401) {
+  if (!error.response && ['TIMEOUT'].some((i) => error.message.toUpperCase().includes(i))) {
     onAuthenticatedHandler(false);
-    isConnected = false;
+  }
+
+  if (error?.response?.status === 401) {
     onUnAuthorizedHandler?.();
     await authenticate();
   }
@@ -203,5 +205,3 @@ export const connect = async (configuration: any, onAuthenticated: (isConnected:
 
   await authenticate();
 };
-
-export const getIsConnected = () => isConnected;
