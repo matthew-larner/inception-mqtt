@@ -16,15 +16,15 @@ export const polling = async () => {
       message = 'triggered';
     } else if (indexOfOne === 10) {
       message = 'pending';
-    } else if (publicState === 9) {
+    } else if (indexOfOne === 9) {
       message = 'arming';
     } else if (indexOfOne === 4) {
       message = 'armed_away';
-    } else if (publicState === 3) {
+    } else if (indexOfOne === 3) {
       message = 'armed_home';
-    } else if (publicState === 2) {
+    } else if (indexOfOne === 2) {
       message = 'armed_night';
-    } else if (publicState === 1) {
+    } else if (indexOfOne === 1) {
       message = 'disarmed';
     } else {
       // ignore if unexpected public state
@@ -139,7 +139,7 @@ export const polling = async () => {
         ];
       }
 
-      console.log('Polling monitor updates');
+      console.log('Polling monitor updates with payload ' + JSON.stringify(monitorUpdatesPayload));
 
       const response = await inception.monitorUpdates(monitorUpdatesPayload);
 

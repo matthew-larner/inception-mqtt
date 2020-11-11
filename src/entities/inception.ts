@@ -183,7 +183,7 @@ export const monitorUpdates = async (payload: any[]): Promise<MonitorUpdatesResp
       timeout
     });
 
-    console.log('Successfully polled monitor updates');
+    console.log('Successfully polled monitor updates with response ' + JSON.stringify(response.data));
 
     return response.data;
   } catch (error) {
