@@ -9,10 +9,11 @@ let isConnected = false;
 let wasConnectedOnce = false;
 let onAuthenticatedHandler: (isConnected: boolean) => void;
 
-const responseErrorHandler = async (error: AxiosError) => {
+const responseErrorHandler = async (error: AxiosError, onUnAuthorizedHandler?: () => void) => {
   if (error?.response?.status === 401) {
     onAuthenticatedHandler(false);
     isConnected = false;
+    onUnAuthorizedHandler?.();
     await authenticate();
   }
 };
@@ -173,7 +174,7 @@ export const getControlInputs = async (): Promise<ControlObjectInterface[]> => {
   }
 };
 
-export const monitorUpdates = async (payload: any[]): Promise<MonitorUpdatesResponseInterface> => {
+export const monitorUpdates = async (payload: any[], onUnAuthorizedHandler: () => void): Promise<MonitorUpdatesResponseInterface> => {
   try {
     const timeout = (config.polling_timeout ?? 60) * 1000;
     const response = await axios.post(`${config.base_url}/monitor-updates`, payload, {
@@ -189,7 +190,7 @@ export const monitorUpdates = async (payload: any[]): Promise<MonitorUpdatesResp
   } catch (error) {
     console.error('Error in posting monitor updates: ' + error.message);
 
-    await responseErrorHandler(error);
+    await responseErrorHandler(error, onUnAuthorizedHandler);
 
     const delaySeconds = (config.polling_delay || 10) * 1000;
     await delay(delaySeconds);

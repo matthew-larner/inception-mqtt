@@ -100,48 +100,52 @@ export const polling = async () => {
 
   let monitorUpdatesPayload: MonitorUpdatesPayloadInterface[];
 
+  const initPayload = () => {
+    monitorUpdatesPayload = [
+      {
+        ID: "AreaStateRequest",
+        RequestType: "MonitorEntityStates",
+        InputData: {
+          stateType: "AreaState",
+          timeSinceUpdate: "0"
+        }
+      },
+      {
+        ID: "InputStateRequest",
+        RequestType: "MonitorEntityStates",
+        InputData: {
+          stateType: "InputState",
+          timeSinceUpdate: "0"
+        }
+      },
+      {
+        ID: "OutputStateRequest",
+        RequestType: "MonitorEntityStates",
+        InputData: {
+          stateType: "OutputState",
+          timeSinceUpdate: "0"
+        }
+      },
+      {
+        ID: "DoorStateRequest",
+        RequestType: "MonitorEntityStates",
+        InputData: {
+          stateType: "DoorState",
+          timeSinceUpdate: "0"
+        }
+      }
+    ];
+  }
+
   while (true) {
     try {
-      if (!monitorUpdatesPayload || !inception.getIsConnected()) {
-        monitorUpdatesPayload = [
-          {
-            ID: "AreaStateRequest",
-            RequestType: "MonitorEntityStates",
-            InputData: {
-              stateType: "AreaState",
-              timeSinceUpdate: "0"
-            }
-          },
-          {
-            ID: "InputStateRequest",
-            RequestType: "MonitorEntityStates",
-            InputData: {
-              stateType: "InputState",
-              timeSinceUpdate: "0"
-            }
-          },
-          {
-            ID: "OutputStateRequest",
-            RequestType: "MonitorEntityStates",
-            InputData: {
-              stateType: "OutputState",
-              timeSinceUpdate: "0"
-            }
-          },
-          {
-            ID: "DoorStateRequest",
-            RequestType: "MonitorEntityStates",
-            InputData: {
-              stateType: "DoorState",
-              timeSinceUpdate: "0"
-            }
-          }
-        ];
+      if (!monitorUpdatesPayload) {
+        initPayload();
       }
 
       console.log('Polling monitor updates with payload ' + JSON.stringify(monitorUpdatesPayload));
 
-      const response = await inception.monitorUpdates(monitorUpdatesPayload);
+      const response = await inception.monitorUpdates(monitorUpdatesPayload, initPayload);
 
       const handler = stateChangeMapping[response?.ID];
 
