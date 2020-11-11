@@ -81,7 +81,7 @@ export const polling = async () => {
 
     if (indexOfOne === 12) {
       message = 'UNLOCKED';
-    } else if (indexOfOne === 1) {
+    } else if (indexOfOne === 4) {
       message = 'LOCKED';
     } else {
       // ignore if unexpected public state
