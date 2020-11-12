@@ -12,6 +12,7 @@ let onAuthenticatedHandler: (isConnected: boolean) => void;
 const responseErrorHandler = async (error: AxiosError, onUnAuthorizedHandler?: () => void) => {
   if (!error.response && !['TIMEOUT'].some((i) => error.message.toUpperCase().includes(i))) {
     onAuthenticatedHandler(false);
+    isConnected = false;
   }
 
   if (error?.response?.status === 401) {
@@ -188,7 +189,10 @@ export const monitorUpdates = async (payload: any[], onUnAuthorizedHandler: () =
 
     console.log('Successfully polled monitor updates with response ' + JSON.stringify(response.data));
 
-    onAuthenticatedHandler(true);
+    if (!isConnected) {
+      onAuthenticatedHandler(true);
+      isConnected = true;
+    }
 
     return response.data;
   } catch (error) {
