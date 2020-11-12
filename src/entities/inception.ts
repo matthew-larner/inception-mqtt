@@ -188,6 +188,8 @@ export const monitorUpdates = async (payload: any[], onUnAuthorizedHandler: () =
 
     console.log('Successfully polled monitor updates with response ' + JSON.stringify(response.data));
 
+    onAuthenticatedHandler(true);
+
     return response.data;
   } catch (error) {
     console.error('Error in posting monitor updates: ' + error.message);
