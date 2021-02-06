@@ -6,7 +6,7 @@ let mqttConfig: any;
 export const connect = (config: any, connectOptions: mqtt.IClientOptions, onConnected?: (client: mqtt.MqttClient) => void) => {
   mqttConfig = config;
 
-  client = mqtt.connect(`mqtt://${config.broker}:${config.port}`, connectOptions);
+  client = mqtt.connect(`mqtt://${config.username}:${config.password}@${config.broker}:${config.port}`, connectOptions);
 
   client.on('error', (err) => {
     console.log(`Mqtt error: ${err.message}`);
