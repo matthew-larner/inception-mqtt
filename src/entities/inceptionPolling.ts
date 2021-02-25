@@ -25,6 +25,8 @@ export const polling = async () => {
       message = 'armed_night';
     } else if (utils.isStringIndexContains(publicStateBin, 1, '1')) {
       message = 'disarmed';
+    } else if (utils.isStringIndexContains(publicStateBin, 12, '1')) {
+      message = 'armed_away';
     } else {
       // ignore if unexpected public state
       return;
