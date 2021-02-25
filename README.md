@@ -29,7 +29,9 @@ Refer to https://github.com/matthew-larner/inception-mqtt/blob/main/configuratio
 ## How it works
 This docker container communicates with the [Inception REST API](https://skytunnel.com.au/Inception/API_SAMPLE/ApiDoc). It will automatically create the following items in Home Assistant if you have [MQTT discovery enabled](https://www.home-assistant.io/docs/mqtt/discovery/). 
 
-You need to have one of the following Home Assistant classes in the zone descrion in order for the zone to be displayed in Home Assistant. motion, garage, door, rex, opening, power, smoke, vibration, window, cold, heat, light or moisture
+You may also find referneces to the API on your local Inception controller. http://192.168.88.1/ApiDoc
+
+You need to have one of the following Home Assistant classes in the input description in Inception in order for the input to be displayed in Home Assistant; motion, garage, door, rex, opening, power, smoke, vibration, window, cold, heat, light or moisture.
 
 | Inception | Home Assistant |
 |-----------|----------------|
