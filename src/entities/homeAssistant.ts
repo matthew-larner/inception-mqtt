@@ -24,7 +24,7 @@ const startControlAreas = async () => {
       state_topic: `inception/alarm_control_panel/${areaId}`,
       command_topic: commandTopic,
       availability_topic: mqttConfig.availability_topic,
-      code: mqttConfig.alarm_code.toString(),
+      code: mqttConfig.alarm_code,
       code_arm_required: false,
       payload_arm_away: 'Arm',
       payload_arm_home: 'ArmStay',
