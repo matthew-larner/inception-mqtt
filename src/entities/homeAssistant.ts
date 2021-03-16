@@ -118,6 +118,8 @@ const startControlInputs = async () => {
       'motion',
       'garage',
       'door',
+      'gate',
+      'button',
       'rex',
       'opening',
       'power',
@@ -127,7 +129,9 @@ const startControlInputs = async () => {
       'cold',
       'heat',
       'light',
-      'moisture'
+      'moisture',
+      'break',
+      'glass'
     ].find(device => name.toLowerCase().includes(device)) || 'opening';
 
     // override found device
