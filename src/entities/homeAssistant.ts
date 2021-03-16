@@ -128,13 +128,17 @@ const startControlInputs = async () => {
       'heat',
       'light',
       'moisture'
-    ].find(device => name.toLowerCase().includes(device)) || 'None';
+    ].find(device => name.toLowerCase().includes(device)) || 'opening';
 
     // override found device
     if (deviceClass === 'garage') {
       deviceClass = 'garage_door';
     } else if (deviceClass === 'rex') {
       deviceClass = 'door';
+    } else if (deviceClass === 'gate') {
+      deviceClass = 'door';
+    } else if (deviceClass === 'button') {
+      deviceClass = 'connectivity';
     }
 
     const message = {
