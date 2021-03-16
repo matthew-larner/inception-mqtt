@@ -139,6 +139,12 @@ const startControlInputs = async () => {
       deviceClass = 'door';
     } else if (deviceClass === 'button') {
       deviceClass = 'connectivity';
+    } else if (deviceClass === 'vibration') {
+      deviceClass = 'vibration';
+    } else if (deviceClass === 'break') {
+      deviceClass = 'vibration';
+    } else if (deviceClass === 'glass') {
+      deviceClass = 'window';
     }
 
     const message = {
