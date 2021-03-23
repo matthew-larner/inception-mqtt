@@ -1,7 +1,8 @@
 import * as inception from './inception';
 import * as mqtt from './mqtt';
+import { MqttConfig } from '../contracts'
 
-let mqttConfig: any;
+let mqttConfig: MqttConfig;
 
 const mqttMessageHandler = (commandTopic: string, callback: (payload: string) => Promise<void>) =>
   async (topic: string, message: Buffer) => {
@@ -163,7 +164,7 @@ const startControlInputs = async () => {
   });
 };
 
-export const connect = async (config: any) => {
+export const connect = async (config: MqttConfig) => {
   mqttConfig = config;
 
   await Promise.all([

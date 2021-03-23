@@ -1,0 +1,40 @@
+{
+  "name": "inception-mqtt addon",
+  "version": "0.4",
+  "slug": "inception-mqtt",
+  "description": "Add-on wrapped inception-mqtt project from matthew-larner for use as addon with Home Assistant OS",
+  "url": "https://github.com/samturner3/inception-mqtt",
+  "options" : {
+    "baseUrl" : null,
+    "port" : 80,
+    "username" : null,
+    "password" : null,
+    "polling_timeout": 60,
+    "polling_delay": 60,
+    "qos": 2,
+    "retain": true,
+    "discovery": true,
+    "discovery_prefix": "homeassistant",
+    "topic_prefix": "inception",
+    "availability_topic": "inception/available",
+    "alarm_code": 1234
+  },
+  "schema": {
+    "baseUrl" : "url",
+    "port" : "int",
+    "username" : "str",
+    "password" : "password",
+    "polling_timeout": "int",
+    "polling_delay": "int",
+    "qos": "int(0,2)",
+    "retain": "bool",
+    "discovery": "bool",
+    "discovery_prefix": "str",
+    "topic_prefix": "str",
+    "availability_topic": "str",
+    "alarm_code": "int"
+  },
+  "services": "mqtt:need",
+  "panel_icon": "mdi:alarm-light",
+  "arch": ["amd64", "armv7", "armhf", "i386" , "aarch64"]
+}

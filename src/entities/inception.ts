@@ -1,9 +1,9 @@
 import axios, { AxiosError } from 'axios';
 import * as delay from 'delay';
 
-import { ControlObjectInterface, MonitorUpdatesResponseInterface } from '../contracts';
+import { ControlObjectInterface, MonitorUpdatesResponseInterface, InceptionConfig } from '../contracts';
 
-let config: any;
+let config: InceptionConfig;
 let userID = '';
 let isConnected = false;
 let wasConnectedOnce = false;
@@ -205,7 +205,7 @@ export const monitorUpdates = async (payload: any[], onUnAuthorizedHandler: () =
   }
 }
 
-export const connect = async (configuration: any, onAuthenticated: (isConnected: boolean) => void) => {
+export const connect = async (configuration: InceptionConfig, onAuthenticated: (isConnected: boolean) => void) => {
   config = configuration;
   onAuthenticatedHandler = onAuthenticated;
 

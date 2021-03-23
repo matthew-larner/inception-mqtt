@@ -1,9 +1,11 @@
 import * as mqtt from 'mqtt';
 
-let client: mqtt.Client;
-let mqttConfig: any;
+import { MqttConfig } from '../contracts'
 
-export const connect = (config: any, connectOptions: mqtt.IClientOptions, onConnected?: (client: mqtt.MqttClient) => void) => {
+let client: mqtt.Client;
+let mqttConfig: MqttConfig;
+
+export const connect = (config: MqttConfig, connectOptions: mqtt.IClientOptions, onConnected?: (client: mqtt.MqttClient) => void) => {
   mqttConfig = config;
 
   client = mqtt.connect(`mqtt://${config.username}:${config.password}@${config.broker}:${config.port}`, connectOptions);
