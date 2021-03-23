@@ -31,6 +31,8 @@ const authenticate = async (): Promise<void> => {
     // Kill app if authentication fails
     if (response.data.Response.Result !== "Success") {
       console.error('Killing application due to failed inception authentication');
+      console.error(response.data.Response.Result);
+      console.error('url: ', config.base_url + '/authentication/login');
       process.exit(1);
     }
 
