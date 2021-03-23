@@ -1,0 +1,13 @@
+configuration:
+  baseUrl:
+    name: Base URL
+    description: "Enter the base URL of your inception controller. Eg:  http://192.168.1.123 OR http://192.168.1.123/api/v1"
+  username:
+    name: Username
+    description: "Enter an Inception username. You need to setup a REST Web API User in the inception web interface"
+  password:
+    name: Password
+    description: "Enter the password you setup for this user as above."
+  alarm_code:
+    name: Alarm code
+    description: "Enter a code to use as the code on Home Assistant only; has not connection to the inception user codes."

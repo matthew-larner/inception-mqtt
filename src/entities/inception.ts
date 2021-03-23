@@ -41,6 +41,7 @@ const authenticate = async (): Promise<void> => {
     onAuthenticatedHandler(true);
   } catch (error) {
     console.error('Error in inception authentication: ' + error.message);
+    console.error('url: ', config.base_url + '/authentication/login');
 
     if (!wasConnectedOnce) {
       process.exit(1);

@@ -1,6 +1,6 @@
 {
   "name": "inception-mqtt addon",
-  "version": "0.4",
+  "version": "0.6",
   "slug": "inception-mqtt",
   "description": "Add-on wrapped inception-mqtt project from matthew-larner for use as addon with Home Assistant OS",
   "url": "https://github.com/samturner3/inception-mqtt",
@@ -34,7 +34,7 @@
     "availability_topic": "str",
     "alarm_code": "int"
   },
-  "services": "mqtt:need",
+  "services": ["mqtt:need"],
   "panel_icon": "mdi:alarm-light",
   "arch": ["amd64", "armv7", "armhf", "i386" , "aarch64"]
 }
