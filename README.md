@@ -47,6 +47,8 @@ The name of the Inputs in Inception needs to contain one of the following words 
 
 ### Outputs
 The name of the Inputs in Inception needs to contain one of the following words (case insensitive), otherwise it won't show up in Home Assistant:
+- `siren`
+- `screamer`
 - `door`
 - `garage`
 - `gate`
