@@ -29,7 +29,8 @@ const startControlAreas = async () => {
       payload_arm_away: 'Arm',
       payload_arm_home: 'ArmStay',
       payload_arm_night: 'ArmSleep',
-      payload_disarm: 'Disarm'
+      payload_disarm: 'Disarm',
+      unique_id: `${areaId}`
     };
     mqtt.publish(topic, JSON.stringify(message));
     mqtt.subscribe(commandTopic);
@@ -55,7 +56,8 @@ const startControlDoors = async () => {
       availability_topic: mqttConfig.availability_topic,
       optimistic: false,
       payload_lock: 'Lock',
-      payload_unlock: 'Unlock'
+      payload_unlock: 'Unlock',
+      unique_id: `${doorId}`
     }
     mqtt.publish(topic, JSON.stringify(message));
     mqtt.subscribe(commandTopic);
@@ -95,6 +97,7 @@ const startControlOutputs = async () => {
       optimistic: false,
       payload_off: 'Off',
       payload_on: 'On',
+      unique_id: `${outputId}`,
       icon
     }
     mqtt.publish(topic, JSON.stringify(message));
@@ -158,6 +161,7 @@ const startControlInputs = async () => {
       device_class: deviceClass,
       payload_off: 'Off',
       payload_on: 'On',
+      unique_id: `${outputId}`
     }
     mqtt.publish(topic, JSON.stringify(message));
   });
