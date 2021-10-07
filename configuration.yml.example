@@ -10,7 +10,7 @@ mqtt:
   discovery_prefix: homeassistant
   topic_prefix: inception
   availability_topic: inception/available
-  alarm_code: 1234
+  alarm_code: '1234'
 
 # Inception area config
 inception:
