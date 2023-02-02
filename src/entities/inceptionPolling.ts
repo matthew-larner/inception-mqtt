@@ -1,4 +1,4 @@
-import { MonitorUpdatesPayloadInterface } from '../contracts';
+import { MonitorStateUpdatesPayloadInterface, StateResultInterface } from '../contracts';
 import * as inception from './inception';
 import * as mqtt from './mqtt';
 import * as utils from './utils';
@@ -96,7 +96,7 @@ export const polling = async () => {
     'DoorStateRequest': publishDoorStateUpdates
   };
 
-  let monitorUpdatesPayload: MonitorUpdatesPayloadInterface[];
+  let monitorUpdatesPayload: MonitorStateUpdatesPayloadInterface[];
 
   const initPayload = () => {
     monitorUpdatesPayload = [
@@ -144,12 +144,13 @@ export const polling = async () => {
       console.log('Polling monitor updates with payload ' + JSON.stringify(monitorUpdatesPayload));
 
       const response = await inception.monitorUpdates(monitorUpdatesPayload, initPayload);
+      const result = response.Result as StateResultInterface;
 
       const handler = stateChangeMapping[response?.ID];
 
       if (handler) {
-        response.Result.stateData.forEach(item => handler(item.ID, item.PublicState));
-        monitorUpdatesPayload.find(item => item.ID === response.ID).InputData.timeSinceUpdate = response.Result.updateTime.toString(); // updates `timeSinceUpdate` = 'Result.updateTime' for the new long polling request.
+        result.stateData.forEach(item => handler(item.ID, item.PublicState));
+        monitorUpdatesPayload.find(item => item.ID === response.ID).InputData.timeSinceUpdate = result.updateTime.toString(); // updates `timeSinceUpdate` = 'Result.updateTime' for the new long polling request.
       }
     } catch (error) {
       console.error('Inception polling encountered an error: ', error.message);

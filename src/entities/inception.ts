@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import * as delay from 'delay';
 
-import { ControlObjectInterface, MonitorUpdatesResponseInterface } from '../contracts';
+import { ControlObjectInterface, MonitorStateUpdatesResponseInterface, MonitorReviewUpdatesResponseInterface } from '../contracts';
 
 let config: any;
 let userID = '';
@@ -178,7 +178,7 @@ export const getControlInputs = async (): Promise<ControlObjectInterface[]> => {
   }
 };
 
-export const monitorUpdates = async (payload: any[], onUnAuthorizedHandler: () => void): Promise<MonitorUpdatesResponseInterface> => {
+export const monitorUpdates = async (payload: any[], onUnAuthorizedHandler: () => void): Promise<MonitorStateUpdatesResponseInterface|MonitorReviewUpdatesResponseInterface> => {
   try {
     const timeout = (config.polling_timeout ?? 60) * 1000;
     const response = await axios.post(`${config.base_url}/monitor-updates`, payload, {

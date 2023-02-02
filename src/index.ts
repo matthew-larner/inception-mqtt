@@ -5,7 +5,8 @@ import { IClientOptions } from 'mqtt';
 import * as mqtt from './entities/mqtt';
 import * as inception from './entities/inception';
 import * as homeAssistant from './entities/homeAssistant';
-import * as inceptionPolling from './entities/inceptionPolling';
+import * as inceptionStateMonitor from './entities/inceptionPolling';
+import * as inceptionLiveReviewMonitor from './entities/inceptionLiveReviewPolling';
 
 const main = async () => {
   try {
@@ -35,7 +36,9 @@ const main = async () => {
 
     await inception.connect(inceptionConfig, publishStatusChange);
     await homeAssistant.connect(mqttConfig);
-    await inceptionPolling.polling();
+    
+    inceptionStateMonitor.polling();
+    inceptionLiveReviewMonitor.polling();
 
   } catch (error) {
     console.error(error.message);
