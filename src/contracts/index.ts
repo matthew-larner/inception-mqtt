@@ -46,11 +46,11 @@ export interface MonitorStateInputData {
   timeSinceUpdate: string;
 }
 
-export type ReviewRequestType = "LiveReviewEvents";
+export type LiveReviewRequestType = "LiveReviewEvents";
 
 export interface MonitorReviewUpdatesPayloadInterface {
-  ID: ReviewRequestType;
-  RequestType: string;
+  ID: LiveReviewRequestType;
+  RequestType: LiveReviewRequestType;
   InputData: MonitorReviewInputData
 }
 

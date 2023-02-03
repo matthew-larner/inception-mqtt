@@ -1,8 +1,10 @@
-import { MonitorReviewUpdatesPayloadInterface, ReviewDataInterface } from '../contracts';
+import { MonitorReviewUpdatesPayloadInterface, ReviewDataInterface, LiveReviewRequestType } from '../contracts';
 import * as inception from './inception';
 import * as mqtt from './mqtt';
 
 export const polling = async () => {
+
+  const liveReviewEvents = 'LiveReviewEvents';
 
   const publishLiveReviewUpdates = (data: ReviewDataInterface) => {
     const topic = `inception/event`;
@@ -17,12 +19,11 @@ export const polling = async () => {
   };
   
   let monitorUpdatesPayload: MonitorReviewUpdatesPayloadInterface[];
-
   const initPayload = () => {
     monitorUpdatesPayload = [
       {
-        ID: "LiveReviewEvents",
-        RequestType: "LiveReviewEvents",
+        ID: liveReviewEvents,
+        RequestType: liveReviewEvents,
         InputData: {
          referenceId: null,
          referenceTime: null
@@ -46,8 +47,8 @@ export const polling = async () => {
       for( let result of results) {
          publishLiveReviewUpdates(result);
          newMonitorUpdatesPayload.push({
-            ID: "LiveReviewEvents",
-            RequestType: "LiveReviewEvents",
+            ID: liveReviewEvents,
+            RequestType: liveReviewEvents,
             InputData: {
              referenceId: result.ID,
              referenceTime: result.WhenTicks
