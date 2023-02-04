@@ -5,9 +5,9 @@
   "private": true,
   "main": "./dist/index.js",
   "scripts": {
-    "start": "./node_modules/.bin/if-env NODE_ENV=local && npm run start:dev || npm run start:prod",
+    "start": "if-env NODE_ENV=local && npm run start:dev || npm run start:prod",
     "start:prod": "node ./dist/index.js",
-    "start:dev": "./node_modules/.bin/tsc-watch --onSuccess \"npm run start:prod\" ",
+    "start:dev": "tsc-watch --onSuccess \"npm run start:prod\" ",
     "build": "./node_modules/typescript/bin/tsc -p ./tsconfig.json"
   },
   "dependencies": {

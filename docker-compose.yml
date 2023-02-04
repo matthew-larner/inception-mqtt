@@ -1,17 +1,14 @@
 version: "3.5"
 services:
   nodejs:
-    build: .
-    container_name: "inception-mqtt"
-    volumes:
-       - ./:/usr/src/app
-       - /usr/src/app/node_modules
-       - /usr/src/app/dist
-       - /usr/src/app/config
-    environment:
-      - TZ=Australia/Perth
-    restart: unless-stopped
-    networks:
-      - app
+	build: .
+	container_name: "inception-mqtt"
+	volumes:
+	  - ./:/usr/src/app
+	  - /usr/src/app/node_modules
+	  - /usr/src/app/dist
+	  - /usr/src/app/config
+	networks:
+	  - app
 networks:
   app:
