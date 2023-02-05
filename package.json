@@ -12,10 +12,10 @@
   },
   "dependencies": {
     "@types/node": "^13.9.1",
-    "axios": "^0.21.0",
+    "axios": "^0.21.4",
     "delay": "^4.4.0",
     "if-env": "^1.0.4",
-    "mqtt": "^4.2.4",
+    "mqtt": "^4.3.7",
     "typescript": "^3.8.3",
     "yaml": "^1.10.0"
   },
