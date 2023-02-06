@@ -2,12 +2,12 @@ import { MonitorReviewUpdatesPayloadInterface, ReviewDataInterface, LiveReviewRe
 import * as inception from './inception';
 import * as mqtt from './mqtt';
 
-export const polling = async () => {
+export const polling = async (mqttConfig: any) => {
 
   const liveReviewEvents = 'LiveReviewEvents';
 
   const publishLiveReviewUpdates = (data: ReviewDataInterface) => {
-    const topic = `inception/event`;
+    const topic = `${mqttConfig.topic_prefix}/event`;
     const { Description, MessageCategory, What, Where } = data;
 
     mqtt.publish(topic, JSON.stringify({
@@ -15,7 +15,7 @@ export const polling = async () => {
       MessageCategory,
       What,
       Where
-    }));
+    }), true);
   };
   
   let monitorUpdatesPayload: MonitorReviewUpdatesPayloadInterface[];
