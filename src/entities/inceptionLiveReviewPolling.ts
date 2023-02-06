@@ -15,7 +15,7 @@ export const polling = async (mqttConfig: any) => {
       MessageCategory,
       What,
       Where
-    }), true);
+    }), false);
   };
   
   let monitorUpdatesPayload: MonitorReviewUpdatesPayloadInterface[];
