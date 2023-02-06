@@ -29,11 +29,11 @@ export const onMessage = (callback: mqtt.OnMessageCallback) => {
   client.on('message', callback);
 };
 
-export const publish = (topic: string, payload: string) => {
+export const publish = (topic: string, payload: string, retain: boolean = mqttConfig.retain) => {
   console.log(`Sending payload: ${payload} to topic: ${topic}`);
   client.publish(topic, payload, {
     qos: mqttConfig.qos,
-    retain: mqttConfig.retain
+    retain
   });
 };
 

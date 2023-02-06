@@ -3,9 +3,9 @@ import * as inception from './inception';
 import * as mqtt from './mqtt';
 import * as utils from './utils';
 
-export const polling = async () => {
+export const polling = async (mqttConfig: any) => {
   const publishAreaStateUpdates = (id: string, publicState: number) => {
-    const topic = `inception/alarm_control_panel/${id}`;
+    const topic = `${mqttConfig.topic_prefix}/alarm_control_panel/${id}`;
     const publicStateBin = utils.numberToBinaryStringWithZeroPadding(publicState, 12);
     let message: string;
 
@@ -35,7 +35,7 @@ export const polling = async () => {
     mqtt.publish(topic, message);
   };
   const publishInputStateUpdates = (id: string, publicState: number) => {
-    const topic = `inception/binary_sensor/${id}`;
+    const topic = `${mqttConfig.topic_prefix}/binary_sensor/${id}`;
     const publicStateBin = utils.numberToBinaryStringWithZeroPadding(publicState, 12);
     let message: string;
 
@@ -53,7 +53,7 @@ export const polling = async () => {
     mqtt.publish(topic, message);
   };
   const publishOutputStateUpdates = (id: string, publicState: number) => {
-    const topic = `inception/switch/${id}`;
+    const topic = `${mqttConfig.topic_prefix}/switch/${id}`;
     const publicStateBin = utils.numberToBinaryStringWithZeroPadding(publicState, 12);
     let message: string;
 
@@ -71,7 +71,7 @@ export const polling = async () => {
     mqtt.publish(topic, message);
   };
   const publishDoorStateUpdates = (id: string, publicState: number) => {
-    const topic = `inception/lock/${id}`;
+    const topic = `${mqttConfig.topic_prefix}/lock/${id}`;
     const publicStateBin = utils.numberToBinaryStringWithZeroPadding(publicState, 12);
     let message: string;
 
