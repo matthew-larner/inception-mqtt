@@ -56,8 +56,8 @@ export const polling = async (mqttConfig: any) => {
         ID: liveReviewEvents,
             RequestType: liveReviewEvents,
             InputData: {
-             referenceId: lastResult.ID,
-             referenceTime: lastResult.WhenTicks
+             referenceId: null,
+             referenceTime: lastResult.WhenTicks+1
             }
       }];
 
