@@ -52,12 +52,14 @@ export const polling = async (mqttConfig: any) => {
       }
 
       const lastResult = results[results.length-1];
+      const referenceTime = lastResult.WhenTicks? parseFloat(lastResult.WhenTicks)+1 : null;
+
       monitorUpdatesPayload = [{
         ID: liveReviewEvents,
             RequestType: liveReviewEvents,
             InputData: {
              referenceId: null,
-             referenceTime: lastResult.WhenTicks+1
+             referenceTime: `${referenceTime}`
             }
       }];
 

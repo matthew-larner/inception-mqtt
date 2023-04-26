@@ -38,7 +38,7 @@ export interface ReviewDataInterface {
   MessageCategory: number;
   What: string;
   Where: string;
-  WhenTicks: number;
+  WhenTicks: string;
 }
 
 export interface MonitorStateInputData {
@@ -56,5 +56,5 @@ export interface MonitorReviewUpdatesPayloadInterface {
 
 export interface MonitorReviewInputData {
   referenceId: string;
-  referenceTime: number;
+  referenceTime: string;
 }
