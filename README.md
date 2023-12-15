@@ -42,13 +42,26 @@ You need to have one of the following Home Assistant classes in the input descri
 
 ### Inputs
 The name of the Inputs in Inception needs to contain one of the following words (case insensitive), otherwise it won't show up in Home Assistant:
+- `motion`
 - `garage`
-- `rex`
+- `door`
 - `gate`
 - `button`
+- `rex`
+- `opening`
+- `power`
+- `smoke`
 - `vibration`
+- `shock`
+- `cold`
+- `heat`
+- `light`
+- `moisture`
 - `break`
 - `glass`
+- `window'
+- `louvre`
+
 
 ### Outputs
 The name of the Inputs in Inception needs to contain one of the following words (case insensitive), otherwise it won't show up in Home Assistant:

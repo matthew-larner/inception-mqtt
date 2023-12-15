@@ -132,13 +132,14 @@ const startControlInputs = async () => {
       'power',
       'smoke',
       'vibration',
-      'window',
+      'shock',
       'cold',
       'heat',
       'light',
       'moisture',
       'break',
-      'glass'
+      'glass',
+      'window'
     ].find(device => name.toLowerCase().includes(device)) || 'opening';
 
     // override found device
@@ -154,6 +155,10 @@ const startControlInputs = async () => {
       deviceClass = 'vibration';
     } else if (deviceClass === 'break') {
       deviceClass = 'vibration';
+    } else if (deviceClass === 'shock') {
+      deviceClass = 'vibration';
+    } else if (deviceClass === 'louvre') {
+      deviceClass = 'window';
     } else if (deviceClass === 'glass') {
       deviceClass = 'window';
     }
