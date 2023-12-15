@@ -123,6 +123,8 @@ const startControlInputs = async () => {
 
     let deviceClass = [
       'motion',
+      'pir',
+      'louvre',
       'garage',
       'door',
       'gate',
@@ -134,17 +136,19 @@ const startControlInputs = async () => {
       'vibration',
       'shock',
       'cold',
-      'heat',
       'light',
       'moisture',
       'break',
       'glass',
-      'window'
+      'window',
+      'heat'
     ].find(device => name.toLowerCase().includes(device)) || 'opening';
 
     // override found device
     if (deviceClass === 'garage') {
       deviceClass = 'garage_door';
+    } else if (deviceClass === 'pir') {
+      deviceClass = 'motion';
     } else if (deviceClass === 'rex') {
       deviceClass = 'door';
     } else if (deviceClass === 'gate') {
