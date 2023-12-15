@@ -59,7 +59,7 @@ The name of the Inputs in Inception needs to contain one of the following words 
 - `moisture`
 - `break`
 - `glass`
-- `window'
+- `window`
 - `louvre`
 
 
