@@ -125,8 +125,8 @@ const startControlInputs = async () => {
       'motion',
       'pir',
       'louvre',
+      'shock',
       'garage',
-      'door',
       'gate',
       'button',
       'rex',
@@ -134,13 +134,13 @@ const startControlInputs = async () => {
       'power',
       'smoke',
       'vibration',
-      'shock',
       'cold',
       'light',
       'moisture',
       'break',
       'glass',
       'window',
+      'door',
       'heat'
     ].find(device => name.toLowerCase().includes(device)) || 'opening';
 
