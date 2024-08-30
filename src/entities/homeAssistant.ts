@@ -124,10 +124,9 @@ const startControlInputs = async () => {
     let deviceClass = [
       'motion',
       'pir',
+      'pe beam',
       'louvre',
       'shock',
-      'garage',
-      'gate',
       'button',
       'rex',
       'opening',
@@ -139,6 +138,10 @@ const startControlInputs = async () => {
       'moisture',
       'break',
       'glass',
+      'side door',
+      'hallway door',
+      'garage',
+      'gate',
       'window',
       'door',
       'heat'
@@ -149,6 +152,12 @@ const startControlInputs = async () => {
       deviceClass = 'garage_door';
     } else if (deviceClass === 'pir') {
       deviceClass = 'motion';
+    } else if (deviceClass === 'pe beam') {
+      deviceClass = 'motion';
+    } else if (deviceClass === 'side door') {
+      deviceClass = 'door';
+    } else if (deviceClass === 'hallway door') {
+      deviceClass = 'door';
     } else if (deviceClass === 'rex') {
       deviceClass = 'door';
     } else if (deviceClass === 'gate') {
