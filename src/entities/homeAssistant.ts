@@ -58,7 +58,7 @@ const startControlDoors = async () => {
       availability_topic: mqttConfig.availability_topic,
       optimistic: false,
       payload_lock: 'Lock',
-      payload_unlock: 'TimedUnlock',
+      payload_unlock: 'Open',
       unique_id: `${doorId}`
     }
     mqtt.publish(topic, JSON.stringify(message));

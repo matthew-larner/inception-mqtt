@@ -107,8 +107,7 @@ export const postControlDoorActivity = async (id: string, controlType: string) =
   try {
     await axios.post(`${config.base_url}/control/door/${id}/activity`, {
       Type: 'ControlDoor',
-      DoorControlType: controlType,
-      TimeSecs: 5
+      DoorControlType: controlType
     }, {
       headers: {
         Cookie: `LoginSessId=${userID}`
