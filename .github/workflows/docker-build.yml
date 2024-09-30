@@ -28,7 +28,7 @@ jobs:
     - name: Extract Docker metadata (tags, labels)
       uses: docker/metadata-action@v4
       with:
-          images: ghcr.io/${{ env.IMAGE_NAME }}
+          images: ghcr.io/matthewlarner/inception-mqtt
 
     - name: Build and push Docker image
       id: push
@@ -37,12 +37,12 @@ jobs:
         context: .
         push: true
         tags: |
-          ghcr.io/${{ env.IMAGE_NAME }}:latest
-          ghcr.io/${{ env.IMAGE_NAME }}:${{ github.event.release.tag_name }}
+          ghcr.io/matthewlarner/inception-mqtt:latest
+          ghcr.io/matthewlarner/inception-mqtt:${{ github.event.release.tag_name }}
 
     - name: Generate artifact attestation
       uses: actions/attest-build-provenance@v1
       with:
-        subject-name: ghcr.io/${{ env.IMAGE_NAME}}
+        subject-name: ghcr.io/matthewlarner/inception-mqtt
         subject-digest: ${{ steps.push.outputs.digest }}
         push-to-registry: true
