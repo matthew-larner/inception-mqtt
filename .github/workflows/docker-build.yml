@@ -33,5 +33,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/myapp:latest
-            ghcr.io/${{ github.repository }}/myapp:${{ github.event.release.tag_name }}
+            ghcr.io/matthewlarner/inception-mqtt:latest
+            ghcr.io/matthewlarner/inception-mqtt:${{ github.event.release.tag_name }}
