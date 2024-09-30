@@ -1,6 +1,5 @@
-name: Build and Push Docker Image to GHCR on Release
+name: Publish Docker Image
 
-# Trigger the workflow when a new release is created
 on:
   release:
     types: [published]
@@ -10,28 +9,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Check out the repository containing the Dockerfile and other necessary files
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      # Set up Docker Buildx for advanced build features like multi-platform builds
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+    - name: Log in to GHCR
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Log in to GitHub Container Registry (GHCR)
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }}
+    - name: Extract Docker metadata (tags, labels)
+      uses: docker/metadata-action@v4
+      with:
+        images: |
+          ghcr.io/matthewlarner/inception-mqtt
 
-      # Build and push the Docker image to GHCR with the 'latest' and release tags
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: |
-            ghcr.io/matthewlarner/inception-mqtt:latest
-            ghcr.io/matthewlarner/inception-mqtt:${{ github.event.release.tag_name }}
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: |
+          ghcr.io/matthewlarner/inception-mqtt:latest
+          ghcr.io/matthewlarner/inception-mqtt:${{ github.event.release.tag_name }}
