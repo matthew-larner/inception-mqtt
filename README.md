@@ -14,7 +14,7 @@ version: '3'
 services:
   inception-mqtt:
     container_name: inception-mqtt
-    image: matthewlarner/inception-mqtt:latest
+    image: ghcr.io/matthew-larner/inception-mqtt:latest
     volumes:
       - ./config:/usr/src/app/config
     environment:
