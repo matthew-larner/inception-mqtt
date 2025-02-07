@@ -1,6 +1,10 @@
 # Inner Range Inception to MQTT
 A docker container to interface Inner Range Inception with MQTT to be used with home automation like Home Assistant
 
+If you get value from this project, please support me!
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/matthewlars)
+
 ## Setup Steps
 1. Create a [MQTT server](https://hub.docker.com/_/eclipse-mosquitto)
 2. Setup config file `configuration.yml` in `/config` directory (example below)
