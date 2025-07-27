@@ -23,7 +23,7 @@ services:
       - ./config:/usr/src/app/config
     environment:
       - TZ=Australia/Sydney
-    restart: always
+    restart: unless-stopped 
 ```
 
 ## Example Config
