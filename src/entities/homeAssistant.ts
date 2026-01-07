@@ -12,6 +12,15 @@ const mqttMessageHandler = (commandTopic: string, callback: (payload: string) =>
     }
   };
 
+// For handling timed outputs e.g. On/Off/3
+const parsePlainPositiveInt = (payload: string): number | undefined => {
+  const s = (payload || '').trim();
+  if (!/^\d+$/.test(s)) return undefined;
+
+  const n = parseInt(s, 10);
+  return Number.isFinite(n) && n > 0 ? n : undefined;
+};
+
 const startControlAreas = async () => {
   const controlAreas = await inception.getControlAreas();
   controlAreas.map(area => {
@@ -107,7 +116,14 @@ const startControlOutputs = async () => {
     mqtt.subscribe(commandTopic);
 
     const outputHandler = mqttMessageHandler(commandTopic, async (payload: string) => {
-      await inception.postControlOutputActivity(outputId, payload);
+      const timeSecs = parsePlainPositiveInt(payload);
+      if (timeSecs) {
+        // Numeric payload -> timed ON
+        await inception.postControlOutputActivity(outputId, 'On', timeSecs);
+      } else {
+        // Normal On / Off
+        await inception.postControlOutputActivity(outputId, payload);
+      }
     });
     mqtt.onMessage(outputHandler);
   });

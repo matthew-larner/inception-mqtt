@@ -140,16 +140,27 @@ export const getControlOutputs = async (): Promise<ControlObjectInterface[]> => 
   }
 };
 
-export const postControlOutputActivity = async (id: string, controlType: string) => {
+export const postControlOutputActivity = async (id: string, controlType: string, timeSecs?: number) => {
   try {
-    await axios.post(`${config.base_url}/control/output/${id}/activity`, {
+    const payload: any = {
       Type: 'ControlOutput',
       OutputControlType: controlType
-    }, {
-      headers: {
-        Cookie: `LoginSessId=${userID}`
+    };
+
+    // Optional timed ON
+    if (controlType === 'On' && Number.isFinite(timeSecs) && (timeSecs as number) > 0) {
+        payload.TimeSecs = Math.floor(timeSecs as number);
+    }
+
+    await axios.post(
+      `${config.base_url}/control/output/${id}/activity`,
+      payload,
+      {
+        headers: {
+          Cookie: `LoginSessId=${userID}`
+        }
       }
-    });
+    );
 
     console.log(`Posted control output activity for output id '${id}' with output control type '${controlType}'`);
   } catch (error) {

@@ -74,3 +74,38 @@ The name of the Inputs in Inception needs to contain one of the following words 
 - `door`
 - `garage`
 - `gate`
+
+## Custom MQTT Commands
+
+These are optional MQTT commands which can't be done via Home Assistant entities.
+
+### Timed Output
+By default, when turning a switch on in Home Assistant, it will publish the MQTT message:
+
+- Topic: `inception/switch/0392896c-9d10-4bfe-9602-851eae0fdc3c/set`
+- Payload: `On`
+
+You can optionally supply an integer instead and it will trigger the output to turn on for the number of seconds supplied, then off. You can find the topic from the Home Assistant discovery topic on MQTT (e.g. homeassistant/switch/* -> command_topic). To do this, push to MQTT directly:
+
+**Turn on the output for 3 seconds:**
+
+- Topic: `inception/switch/0392896c-9d10-4bfe-9602-851eae0fdc3c/set`
+- Payload: `3`
+
+### Unlock a Door
+By default, when unlocking a door via Home Assistant, it sends 'Open' to Inception, which unlocks the door for a set number of seconds (as defined via the Inception dashboard), then locks it again. You may want to keep the door unlocked. You can find the topic from the Home Assistant discovery topic on MQTT (e.g. homeassistant/lock/* -> command_topic). To do this, push to MQTT directly:
+
+**To Unlock door:**
+
+- Topic: `inception/lock/98512c65-4d2e-58ec-9d1c-3445dbe65215/set`
+- Payload: `Unlock`
+
+**To Lock door:**
+
+- Topic: `inception/lock/98512c65-4d2e-58ec-9d1c-3445dbe65215/set`
+- Payload: `Unlock`
+
+**To Open door** (unlock for x number of seconds as defined in the Inception dashboard):
+
+- Topic: `inception/lock/98512c65-4d2e-58ec-9d1c-3445dbe65215/set`
+- Payload: `Open`
