@@ -1,7 +1,19 @@
 import axios, { AxiosError } from 'axios';
+import * as http from 'http';
+import * as https from 'https';
 import * as delay from 'delay';
 
 import { ControlObjectInterface, MonitorStateUpdatesResponseInterface, MonitorReviewUpdatesResponseInterface } from '../contracts';
+
+// Create HTTP agents with keep-alive to reuse connections and avoid repeated DNS lookups
+const httpAgent = new http.Agent({ keepAlive: true });
+const httpsAgent = new https.Agent({ keepAlive: true });
+
+// Create a shared axios instance with connection reuse
+const axiosInstance = axios.create({
+  httpAgent,
+  httpsAgent
+});
 
 let config: any;
 let userID = '';
@@ -23,7 +35,7 @@ const responseErrorHandler = async (error: AxiosError, onUnAuthorizedHandler?: (
 
 const authenticate = async (): Promise<void> => {
   try {
-    const response = await axios.post(config.base_url + '/authentication/login', {
+    const response = await axiosInstance.post(config.base_url + '/authentication/login', {
       Username: config.username,
       Password: config.password
     });
@@ -50,7 +62,7 @@ const authenticate = async (): Promise<void> => {
 
 export const getControlAreas = async (): Promise<ControlObjectInterface[]> => {
   try {
-    const response = await axios.get(config.base_url + '/control/area', {
+    const response = await axiosInstance.get(config.base_url + '/control/area', {
       headers: {
         Cookie: `LoginSessId=${userID}`
       }
@@ -68,7 +80,7 @@ export const getControlAreas = async (): Promise<ControlObjectInterface[]> => {
 
 export const postControlAreaActivity = async (id: string, controlType: string) => {
   try {
-    await axios.post(`${config.base_url}/control/area/${id}/activity`, {
+    await axiosInstance.post(`${config.base_url}/control/area/${id}/activity`, {
       Type: 'ControlArea',
       AreaControlType: controlType
     }, {
@@ -87,7 +99,7 @@ export const postControlAreaActivity = async (id: string, controlType: string) =
 
 export const getControlDoors = async (): Promise<ControlObjectInterface[]> => {
   try {
-    const response = await axios.get(config.base_url + '/control/door', {
+    const response = await axiosInstance.get(config.base_url + '/control/door', {
       headers: {
         Cookie: `LoginSessId=${userID}`
       }
@@ -105,7 +117,7 @@ export const getControlDoors = async (): Promise<ControlObjectInterface[]> => {
 
 export const postControlDoorActivity = async (id: string, controlType: string) => {
   try {
-    await axios.post(`${config.base_url}/control/door/${id}/activity`, {
+    await axiosInstance.post(`${config.base_url}/control/door/${id}/activity`, {
       Type: 'ControlDoor',
       DoorControlType: controlType
     }, {
@@ -124,7 +136,7 @@ export const postControlDoorActivity = async (id: string, controlType: string) =
 
 export const getControlOutputs = async (): Promise<ControlObjectInterface[]> => {
   try {
-    const response = await axios.get(config.base_url + '/control/output', {
+    const response = await axiosInstance.get(config.base_url + '/control/output', {
       headers: {
         Cookie: `LoginSessId=${userID}`
       }
@@ -152,7 +164,7 @@ export const postControlOutputActivity = async (id: string, controlType: string,
         payload.TimeSecs = Math.floor(timeSecs as number);
     }
 
-    await axios.post(
+    await axiosInstance.post(
       `${config.base_url}/control/output/${id}/activity`,
       payload,
       {
@@ -172,7 +184,7 @@ export const postControlOutputActivity = async (id: string, controlType: string,
 
 export const getControlInputs = async (): Promise<ControlObjectInterface[]> => {
   try {
-    const response = await axios.get(config.base_url + '/control/input', {
+    const response = await axiosInstance.get(config.base_url + '/control/input', {
       headers: {
         Cookie: `LoginSessId=${userID}`
       }
@@ -191,7 +203,7 @@ export const getControlInputs = async (): Promise<ControlObjectInterface[]> => {
 export const monitorUpdates = async (payload: any[], onUnAuthorizedHandler: () => void): Promise<MonitorStateUpdatesResponseInterface|MonitorReviewUpdatesResponseInterface> => {
   try {
     const timeout = (config.polling_timeout ?? 60) * 1000;
-    const response = await axios.post(`${config.base_url}/monitor-updates`, payload, {
+    const response = await axiosInstance.post(`${config.base_url}/monitor-updates`, payload, {
       headers: {
         Cookie: `LoginSessId=${userID}`
       },
