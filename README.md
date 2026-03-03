@@ -21,14 +21,49 @@ services:
     image: ghcr.io/matthew-larner/inception-mqtt:latest
     volumes:
       - ./config:/usr/src/app/config
+      # - ./certs:/usr/src/app/certs  # Optional: mount TLS certificates
     environment:
       - TZ=Australia/Sydney
-    restart: unless-stopped 
+    restart: unless-stopped
 ```
 
 ## Example Config
 
 Refer to https://github.com/matthew-larner/inception-mqtt/blob/main/configuration.yml.example
+
+## MQTT TLS/SSL
+
+To encrypt the MQTT connection with TLS:
+
+1. Set `tls: true` in your `configuration.yml` and update the port (standard MQTTS port is `8883`)
+2. Mount your certificate files into the container by adding a volume to your docker compose:
+   ```yaml
+   volumes:
+     - ./config:/usr/src/app/config
+     - ./certs:/usr/src/app/certs
+   ```
+3. Add the certificate paths to your config:
+   ```yaml
+   mqtt:
+     broker: 192.168.1.102
+     port: 8883
+     tls: true
+     cafile: /usr/src/app/certs/ca.crt
+   ```
+
+### TLS Config Options
+
+| Option | Required | Description |
+|--------|----------|-------------|
+| `tls` | Yes | Set to `true` to enable TLS |
+| `cafile` | No | Path to CA certificate file |
+| `certfile` | No | Path to client certificate (for mutual TLS) |
+| `keyfile` | No | Path to client private key (for mutual TLS) |
+| `reject_unauthorized` | No | Set to `false` to allow self-signed certificates (default: `true`) |
+
+### Self-Signed Certificates
+
+If your MQTT broker uses a self-signed certificate (common with Mosquitto), set `reject_unauthorized: false` in your config, or provide the CA certificate via `cafile`.
 
 ## How it works
 This docker container communicates with the [Inception REST API](https://skytunnel.com.au/Inception/API_SAMPLE/ApiDoc). It will automatically create the following items in Home Assistant if you have [MQTT discovery enabled](https://www.home-assistant.io/docs/mqtt/discovery/). 

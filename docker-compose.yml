@@ -8,6 +8,7 @@ services:
 	  - /usr/src/app/node_modules
 	  - /usr/src/app/dist
 	  - /usr/src/app/config
+	  # - ./certs:/usr/src/app/certs
 	networks:
 	  - app
 networks:

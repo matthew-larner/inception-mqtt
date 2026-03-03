@@ -12,6 +12,13 @@ mqtt:
   availability_topic: inception/available
   alarm_code: '1234'
 
+  # TLS Settings (optional)
+  # tls: true                              # Enable TLS (uses mqtts:// protocol, default port 8883)
+  # cafile: /usr/src/app/certs/ca.crt      # Path to CA certificate
+  # certfile: /usr/src/app/certs/client.crt  # Path to client certificate (for mutual TLS)
+  # keyfile: /usr/src/app/certs/client.key   # Path to client private key (for mutual TLS)
+  # reject_unauthorized: true              # Set to false for self-signed certificates
+
 # Inception area config
 inception:
   - base_url: http://192.168.1.188/api/v1

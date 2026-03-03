@@ -1,4 +1,5 @@
 import * as mqtt from 'mqtt';
+import * as fs from 'fs';
 
 let client: mqtt.Client;
 let mqttConfig: any;
@@ -6,7 +7,15 @@ let mqttConfig: any;
 export const connect = (config: any, connectOptions: mqtt.IClientOptions, onConnected?: (client: mqtt.MqttClient) => void) => {
   mqttConfig = config;
 
-  client = mqtt.connect(`mqtt://${config.username}:${config.password}@${config.broker}:${config.port}`, connectOptions);
+  if (config.tls) {
+    if (config.cafile) connectOptions.ca = fs.readFileSync(config.cafile);
+    if (config.certfile) connectOptions.cert = fs.readFileSync(config.certfile);
+    if (config.keyfile) connectOptions.key = fs.readFileSync(config.keyfile);
+    if (config.reject_unauthorized !== undefined) connectOptions.rejectUnauthorized = config.reject_unauthorized;
+  }
+
+  const protocol = config.tls ? 'mqtts' : 'mqtt';
+  client = mqtt.connect(`${protocol}://${config.username}:${config.password}@${config.broker}:${config.port}`, connectOptions);
 
   client.on('error', (err) => {
     console.log(`Mqtt error: ${err.message}`);
